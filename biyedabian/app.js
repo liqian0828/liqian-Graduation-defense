@@ -4,11 +4,34 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var session = require('express-session');
+var mongoose=require("./model/db.js");
+var db=mongoose.connection;
+db.on('error', function(){
 
+    console.log("数据库连接失败！")
+
+});
+db.on('open', function(){
+
+    console.log("数据库连接成功！")
+
+});
 var index = require('./routes/index');
 var users = require('./routes/users');
 
 var app = express();
+
+ueditor_backend(app);
+
+app.set('trust proxy', 1) // trust first proxy
+app.use(session({
+    secret: 'keyboard cat',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {}
+}))
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
